@@ -8,8 +8,12 @@
 	<canvas id="boardCanvas" height="600" width="600"></canvas>
 	<script type="text/javascript">
 		const board_brdr = "black";
-		const board_bkg = "white";
+		const board_bkg = "lightgreen";
+		const snake_clr = "lightblue";
+		const snake_brdr = "darkblue";
 
+		let snake = [{x:300,y:300}, {x:290,y:300}, {x:280,y:300}
+		, {x:270,y:300}, {x:260,y:300}];
 		const board = document.getElementById("boardCanvas");
 		const board_cntx = board.getContext("2d");
 
@@ -17,10 +21,26 @@
 		main();
 
 		function main(){
+			clearCanvas();
+			drawSnake();
+		}
+
+		function clearCanvas() {
 			board_cntx.fillStyle = board_bkg;
 			board_cntx.strokeStyle = board_brdr;
 			board_cntx.fillRect(0,0,board.width,board.height);
 			board_cntx.strokeRect(0,0,board.width,board.height);
+		}
+
+		function drawSnake() {
+			snake.forEach(drawSnakePart);
+		}
+
+		function drawSnakePart(snakePart){
+			board_cntx.fillStyle = snake_clr;
+			board_cntx.strokeStyle = snake_brdr;
+			board_cntx.fillRect(snakePart.x,snakePart.y,10,10);
+			board_cntx.strokeRect(snakePart.x,snakePart.y,10,10);
 		}
 	</script>
 </body>

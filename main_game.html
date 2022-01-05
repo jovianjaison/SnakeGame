@@ -14,6 +14,9 @@
 
 		let snake = [{x:300,y:300}, {x:290,y:300}, {x:280,y:300}
 		, {x:270,y:300}, {x:260,y:300}];
+		let dx = 10;
+		let dy = 0;
+
 		const board = document.getElementById("boardCanvas");
 		const board_cntx = board.getContext("2d");
 
@@ -21,8 +24,13 @@
 		main();
 
 		function main(){
-			clearCanvas();
-			drawSnake();
+			setTimeout(function Cycle(){
+				clearCanvas();
+				drawSnake();
+				move_snake();
+				main();
+			}, 100);
+			
 		}
 
 		function clearCanvas() {
@@ -42,8 +50,12 @@
 			board_cntx.fillRect(snakePart.x,snakePart.y,10,10);
 			board_cntx.strokeRect(snakePart.x,snakePart.y,10,10);
 		}
+
+		function move_snake(){
+			const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+			snake.unshift(head);
+			snake.pop();
+		}
 	</script>
 </body>
 </html>
-
-<!-- https://www.educative.io/blog/javascript-snake-game-tutorial -->

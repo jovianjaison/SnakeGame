@@ -9,6 +9,7 @@
 	<script type="text/javascript">
 		const board_brdr = "black";
 		const board_bkg = "lightgreen";
+		const board_bkg_loss = "red";
 		const snake_clr = "lightblue";
 		const snake_brdr = "darkblue";
 
@@ -28,8 +29,11 @@
 		document.addEventListener("keydown",change_direction);
 
 		function main(){
+			if(isGameEnd())
+				return;
+
 			changing_direction = false;
-			alert("FALSE");
+		
 			setTimeout(function Cycle(){
 				clearCanvas();
 				drawSnake();
@@ -99,6 +103,17 @@
 			}
 
 		}
+
+		function isGameEnd(){
+			if(snake[0].x>=600 || snake[0].x<=0 || snake[0].y>=600 || snake[0].y<=0){
+				board_cntx.fillStyle = board_bkg_loss;
+				board_cntx.fillRect(0,0,board.width,board.height);
+				return true;
+			}
+			else
+				return false;
+		}
+
 	</script>
 </body>
 </html>

@@ -5,6 +5,8 @@
 	<link rel="stylesheet" type="text/css" href="game.css">
 </head>
 <body>
+	<h1 id="score_display">Score: 0</h1>
+
 	<canvas id="boardCanvas" height="600" width="600"></canvas>
 	<script type="text/javascript">
 		const board_brdr = "black";
@@ -12,6 +14,7 @@
 		const board_bkg_loss = "red";
 		const snake_clr = "lightblue";
 		const snake_brdr = "darkblue";
+		const food_clr = "yellow";
 
 
 		let snake = [{x:300,y:300}, {x:290,y:300}, {x:280,y:300}
@@ -19,12 +22,17 @@
 		let dx = 10;
 		let dy = 0;
 		let changing_direction = false;
+		let foodX;
+		let foodY;
+
+		let score = 0;
 
 		const board = document.getElementById("boardCanvas");
 		const board_cntx = board.getContext("2d");
 
 		//Call main to Start game
 		main();
+		generateFood();
 
 		document.addEventListener("keydown",change_direction);
 
@@ -32,11 +40,15 @@
 			if(isGameEnd())
 				return;
 
+			//consumeFood();
+
 			changing_direction = false;
-		
+			
+
 			setTimeout(function Cycle(){
 				clearCanvas();
 				drawSnake();
+				drawFood();
 				move_snake();
 				main();
 			}, 100);
@@ -64,7 +76,11 @@
 		function move_snake(){
 			const head = {x: snake[0].x + dx, y: snake[0].y + dy};
 			snake.unshift(head);
-			snake.pop();
+			if(hasConsumedFood()){
+				score += 10;
+				document.getElementById("score_display").innerHTML = "Score: " + score;
+			}else
+				snake.pop();
 		}
 
 		function change_direction(event){
@@ -105,12 +121,12 @@
 		}
 
 		function isGameEnd(){
-			for(let i=1;i<snake.length;i++){
+			for(let i=4;i<snake.length;i++){
 				if(snake[0].x==snake[i].x && snake[0].y==snake[i].y)
 					return true;
 			}
 
-			if(snake[0].x>=board.width || snake[0].x<=0 || snake[0].y>=board.height || snake[0].y<=0){
+			if(snake[0].x>=board.width|| snake[0].x<0 || snake[0].y>=board.height|| snake[0].y<0){
 				//board_cntx.fillStyle = board_bkg_loss;
 				//board_cntx.fillRect(0,0,board.width,board.height);
 				return true;
@@ -119,6 +135,27 @@
 				return false;
 		}
 
+		function generateFood(){
+			let min = 0;
+			let max = board.width - 10;
+			foodX = Math.round((Math.random() * (max-min) + min) / 10) * 10;
+			foodY = Math.round((Math.random() * (max-min) + min) / 10) * 10;
+		}
+
+		function hasConsumedFood(){
+			if(snake[0].x == foodX && snake[0].y == foodY){
+				//snake.push({x:snake[snake.length-1].x,y:snake[snake.length-1].y});
+				generateFood();
+				return true;
+			}else{
+				return false;
+			}
+		}
+
+		function drawFood(){
+			board_cntx.fillStyle = food_clr;
+			board_cntx.fillRect(foodX,foodY,10,10);
+		}
 	</script>
 </body>
 </html>
